@@ -108,13 +108,44 @@ const getCountMakets = async (req, res) => {
     }
 };
 
+
+
+const getMaketsPagination = async (req, res) => {
+const {page, limits} = req.query
+
+  console.log(53453)
+  let pageOn = page -1
+  let limit = limits
+  try {
+ const count = await connection.execute(
+    `SELECT count(*) as count FROM makets`);     
+
+    let pages = count[0][0].count / limit
+    
+  const resp = await connection.execute(
+    `SELECT makets.id, makets.link, makets.image, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, types.type, adaptives.adaptive, language.language, colors.color 
+       FROM makets LEFT JOIN levels ON makets.level_id = levels.id LEFT JOIN types ON makets.type_id = types.id
+       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id LEFT JOIN language ON makets.language_id = language.id
+       LEFT JOIN colors ON makets.color_id = colors.id LIMIT ${pageOn * limit},${limit}`);        
+    res.status(200).json({
+      count: count[0][0].count,
+      pages: Math.ceil(pages),
+      data: resp[0]
+    })   
+          
+    } catch {
+      res.status(500).json({ status: "error", message: "Не удалось получить список, повторите попытку познее" });
+    }
+};
+
 module.exports = {
   getAllMakets,
   getMaket,
   getMaketForOption,
   getRandomMaketForOption,
   getMaketPopular,
-  getCountMakets
+  getCountMakets,
+  getMaketsPagination
 
 };
 
