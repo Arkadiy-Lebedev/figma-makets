@@ -6,14 +6,15 @@ function getRndInteger(min, max) {
 }
 
 
+
 const getAllMakets = async (req, res) => {
 
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, types.type, adaptives.adaptive, language.language, colors.color 
-       FROM makets LEFT JOIN levels ON makets.level_id = levels.id LEFT JOIN types ON makets.type_id = types.id
-       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id LEFT JOIN language ON makets.language_id = language.id
-       LEFT JOIN colors ON makets.color_id = colors.id`);        
+    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+       FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
+       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id 
+       `);        
          res.status(200).json({data: resp[0]})   
           
     } catch {
@@ -26,10 +27,9 @@ const getMaket = async (req, res) => {
   const {id} = req.query
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, types.type, adaptives.adaptive, language.language, colors.color 
-       FROM makets LEFT JOIN levels ON makets.level_id = levels.id LEFT JOIN types ON makets.type_id = types.id
-       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id LEFT JOIN language ON makets.language_id = language.id
-       LEFT JOIN colors ON makets.color_id = colors.id WHERE makets.id = ?`, [id]);        
+    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+       FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
+       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE makets.id = ?`, [id]);        
          res.status(200).json({data: resp[0]})   
           
     } catch {
@@ -38,14 +38,13 @@ const getMaket = async (req, res) => {
 };
 
 const getMaketForOption = async (req, res) => {
-  console.log(req.query)
+ 
   const {type, option} = req.query
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, levels.level, types.type, adaptives.adaptive, language.language, colors.color 
-       FROM makets LEFT JOIN levels ON makets.level_id = levels.id LEFT JOIN types ON makets.type_id = types.id
-       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id LEFT JOIN language ON makets.language_id = language.id
-       LEFT JOIN colors ON makets.color_id = colors.id WHERE ${type} = ?`, [option]);        
+    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+       FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
+       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE ${type} LIKE '%${option}%'`);        
          res.status(200).json({data: resp[0]})   
           
     } catch {
@@ -58,10 +57,9 @@ const getRandomMaketForOption = async (req, res) => {
   const {type, option} = req.query
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, levels.level, types.type, adaptives.adaptive, language.language, colors.color 
-       FROM makets LEFT JOIN levels ON makets.level_id = levels.id LEFT JOIN types ON makets.type_id = types.id
-       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id LEFT JOIN language ON makets.language_id = language.id
-       LEFT JOIN colors ON makets.color_id = colors.id WHERE ${type} = ?`, [option]);   
+    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+       FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
+       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE ${type} LIKE '%${option}%'`);   
 
        let arr = []
 
@@ -80,10 +78,9 @@ const getMaketPopular = async (req, res) => {
 
     try {
   const resp = await connection.execute(
-     `SELECT makets.id, makets.link, makets.image, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", levels.level, types.type, adaptives.adaptive, language.language, colors.color 
-       FROM makets LEFT JOIN levels ON makets.level_id = levels.id LEFT JOIN types ON makets.type_id = types.id
-       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id LEFT JOIN language ON makets.language_id = language.id
-       LEFT JOIN colors ON makets.color_id = colors.id ORDER BY makets.likes DESC`);   
+     `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+       FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
+       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id ORDER BY makets.likes DESC`);   
 
        let arr = resp[0].slice(0, 5)
     
@@ -113,7 +110,7 @@ const getCountMakets = async (req, res) => {
 const getMaketsPagination = async (req, res) => {
 const {page, limits} = req.query
 
-  console.log(53453)
+ 
   let pageOn = page -1
   let limit = limits
   try {
@@ -123,10 +120,9 @@ const {page, limits} = req.query
     let pages = count[0][0].count / limit
     
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, types.type, adaptives.adaptive, language.language, colors.color 
-       FROM makets LEFT JOIN levels ON makets.level_id = levels.id LEFT JOIN types ON makets.type_id = types.id
-       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id LEFT JOIN language ON makets.language_id = language.id
-       LEFT JOIN colors ON makets.color_id = colors.id LIMIT ${pageOn * limit},${limit}`);        
+    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+       FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
+       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id LIMIT ${pageOn * limit},${limit}`);        
     res.status(200).json({
       count: count[0][0].count,
       pages: Math.ceil(pages),
