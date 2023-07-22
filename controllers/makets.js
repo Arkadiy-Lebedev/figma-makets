@@ -94,12 +94,27 @@ const getMaketPopular = async (req, res) => {
     }
 };
 
+
+const getCountMakets = async (req, res) => {
+
+    try {
+  const resp = await connection.execute(
+     `SELECT COUNT(*) as count FROM makets;`);   
+    
+         res.status(200).json({data: resp[0]})  
+          
+    } catch {
+      res.status(500).json({ status: "error", message: "Не удалось получить список, повторите попытку познее" });
+    }
+};
+
 module.exports = {
   getAllMakets,
   getMaket,
   getMaketForOption,
   getRandomMaketForOption,
-  getMaketPopular
+  getMaketPopular,
+  getCountMakets
 
 };
 
