@@ -11,7 +11,7 @@ const getAllMakets = async (req, res) => {
 
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+    `SELECT makets.id, makets.link, makets.image, CAST(CONCAT('["', REPLACE(makets.type, ', ', '", "'), '"]') AS JSON) AS type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(CONCAT('["', REPLACE(makets.images, ', ', '", "'), '"]') AS JSON) AS images, makets.features, levels.level, adaptives.adaptive  
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id 
        `);        
@@ -27,7 +27,7 @@ const getMaket = async (req, res) => {
   const {id} = req.query
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+    `SELECT makets.id, makets.link, makets.image, CAST(CONCAT('["', REPLACE(makets.type, ', ', '", "'), '"]') AS JSON) AS type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(CONCAT('["', REPLACE(makets.images, ', ', '", "'), '"]') AS JSON) AS images, makets.features, levels.level, adaptives.adaptive  
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE makets.id = ?`, [id]);        
          res.status(200).json({data: resp[0]})   
@@ -42,7 +42,7 @@ const getMaketForOption = async (req, res) => {
   const {type, option} = req.query
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+    `SELECT makets.id, makets.link, makets.image, CAST(CONCAT('["', REPLACE(makets.type, ', ', '", "'), '"]') AS JSON) AS type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(CONCAT('["', REPLACE(makets.images, ', ', '", "'), '"]') AS JSON) AS images, makets.features, levels.level, adaptives.adaptive  
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE ${type} LIKE '%${option}%'`);        
          res.status(200).json({data: resp[0]})   
@@ -57,7 +57,7 @@ const getRandomMaketForOption = async (req, res) => {
   const {type, option} = req.query
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+    `SELECT makets.id, makets.link, makets.image, CAST(CONCAT('["', REPLACE(makets.type, ', ', '", "'), '"]') AS JSON) AS type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(CONCAT('["', REPLACE(makets.images, ', ', '", "'), '"]') AS JSON) AS images, makets.features, levels.level, adaptives.adaptive  
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE ${type} LIKE '%${option}%'`);   
 
@@ -78,7 +78,7 @@ const getMaketPopular = async (req, res) => {
 
     try {
   const resp = await connection.execute(
-     `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+     `SELECT makets.id, makets.link, makets.image, CAST(CONCAT('["', REPLACE(makets.type, ', ', '", "'), '"]') AS JSON) AS type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(CONCAT('["', REPLACE(makets.images, ', ', '", "'), '"]') AS JSON) AS images, makets.features, levels.level, adaptives.adaptive  
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id ORDER BY makets.likes DESC`);   
 
@@ -120,7 +120,7 @@ const {page, limits} = req.query
     let pages = count[0][0].count / limit
     
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
+    `SELECT makets.id, makets.link, makets.image, CAST(CONCAT('["', REPLACE(makets.type, ', ', '", "'), '"]') AS JSON) AS type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(CONCAT('["', REPLACE(makets.images, ', ', '", "'), '"]') AS JSON) AS images, makets.features, levels.level, adaptives.adaptive  
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id LIMIT ${pageOn * limit},${limit}`);        
     res.status(200).json({
