@@ -1,5 +1,5 @@
 const express = require("express");
-const {getAllMakets, getMaket, getMaketForOption, getRandomMaketForOption, getMaketPopular, getCountMakets, getMaketsPagination } = require("../controllers/makets");
+const {getAllMakets, getMaket, getMaketForOption, getRandomMaketForOption, getMaketPopular, getCountMakets, getMaketsPagination, addMakets } = require("../controllers/makets");
 const router = express.Router();
 
 
@@ -10,7 +10,7 @@ router.get("/popular", getMaketPopular);
 router.get("/option", getMaketForOption);
 router.get("/random-for-option", getRandomMaketForOption);
 router.get("/paginations", getMaketsPagination);
-
+router.post("/", addMakets);
 
 module.exports = router;
 
