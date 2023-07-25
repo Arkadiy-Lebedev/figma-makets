@@ -5,15 +5,11 @@ function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
 
-
-
 const getAllMakets = async (req, res) => {
-
-  // CAST(CONCAT('["', REPLACE(makets.type, ', ', '", "'), '"]') AS JSON) AS type
 
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, CAST(makets.type AS JSON) AS type, CAST(makets.language AS JSON) AS language, CAST(makets.color AS JSON) AS color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(makets.images AS JSON) AS images, makets.features, levels.level, adaptives.adaptive  
+    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive  
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id 
        `);        
@@ -29,7 +25,7 @@ const getMaket = async (req, res) => {
   const {id} = req.query
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, CAST(makets.type AS JSON) AS type, CAST(makets.language AS JSON) AS language, CAST(makets.color AS JSON) AS color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(makets.images AS JSON) AS images, makets.features, levels.level, adaptives.adaptive
+    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE makets.id = ?`, [id]);        
          res.status(200).json({data: resp[0]})   
@@ -44,7 +40,7 @@ const getMaketForOption = async (req, res) => {
   const {type, option} = req.query
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, CAST(makets.type AS JSON) AS type, CAST(makets.language AS JSON) AS language, CAST(makets.color AS JSON) AS color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(makets.images AS JSON) AS images, makets.features, levels.level, adaptives.adaptive
+    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE ${type} LIKE '%${option}%'`);        
          res.status(200).json({data: resp[0]})   
@@ -59,7 +55,7 @@ const getRandomMaketForOption = async (req, res) => {
   const {type, option} = req.query
     try {
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, CAST(makets.type AS JSON) AS type, CAST(makets.language AS JSON) AS language, CAST(makets.color AS JSON) AS color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(makets.images AS JSON) AS images, makets.features, levels.level, adaptives.adaptive
+    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE ${type} LIKE '%${option}%'`);   
 
@@ -80,7 +76,7 @@ const getMaketPopular = async (req, res) => {
 
     try {
   const resp = await connection.execute(
-     `SELECT makets.id, makets.link, makets.image, CAST(makets.type AS JSON) AS type, CAST(makets.language AS JSON) AS language, CAST(makets.color AS JSON) AS color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(makets.images AS JSON) AS images, makets.features, levels.level, adaptives.adaptive
+     `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id ORDER BY makets.likes DESC`);   
 
@@ -122,7 +118,7 @@ const {page, limits} = req.query
     let pages = count[0][0].count / limit
     
   const resp = await connection.execute(
-    `SELECT makets.id, makets.link, makets.image, CAST(makets.type AS JSON) AS type, CAST(makets.language AS JSON) AS language, CAST(makets.color AS JSON) AS color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", CAST(makets.images AS JSON) AS images, makets.features, levels.level, adaptives.adaptive
+    `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
        LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id LIMIT ${pageOn * limit},${limit}`);        
     res.status(200).json({
@@ -152,7 +148,7 @@ const addMakets = async (req, res) => {
   date,
   images,
   features } = req.body
-  console.log(req.body)
+ 
 
 let daetOn 
   if (date) {
@@ -165,7 +161,7 @@ let daetOn
      const resp = await connection.execute(
        `INSERT INTO makets(id, link, image, level_id, type, adaptive_id, language, color, price, description, likes, title, date, images, features) 
    VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-   [null, link, image, level_id, type, adaptive_id, language, color, price, description, likes, title, daetOn, images, features]);   
+   [null, link, image, level_id, JSON.stringify(type) , adaptive_id, JSON.stringify(language), JSON.stringify(color), price, description, likes, title, daetOn, JSON.stringify(images), features]);   
          console.log(resp[0])     
          res.status(200).json({data: resp[0]})   
           
