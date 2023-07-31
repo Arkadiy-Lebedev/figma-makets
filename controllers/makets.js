@@ -36,17 +36,24 @@ const getMaket = async (req, res) => {
 };
 
 const getMaketForOption = async (req, res) => {
- 
-  const {type, option} = req.query
+
+
+  console.log(req.query)
+  let search = ""
+  for (var key in req.query) {
+    search += ` ${key} LIKE '%${req.query[key]}%' OR`
+  }
+const find = search.substring(0, search.length - 2);
+
     try {
   const resp = await connection.execute(
     `SELECT makets.id, makets.link, makets.image, makets.type, makets.language, makets.color, makets.price, makets.description, makets.likes, makets.title, DATE_FORMAT(makets.date,'%Y-%m-%d') AS "date", makets.images, makets.features, levels.level, adaptives.adaptive
        FROM makets LEFT JOIN levels ON makets.level_id = levels.id 
-       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE ${type} LIKE '%${option}%'`);        
+       LEFT JOIN adaptives ON makets.adaptive_id = adaptives.id WHERE ${find}`);        
          res.status(200).json({data: resp[0]})   
           
     } catch {
-      res.status(500).json({ status: "error", message: "Не удалось получить список, повторите попытку познее" });
+      res.status(500).json({ status: "error", message: "Не удалось получить список, повторите попытку позднее" });
     }
 };
 
