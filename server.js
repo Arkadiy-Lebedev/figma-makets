@@ -22,6 +22,7 @@ app.use("/static", express.static(__dirname + "/assets"));
 app.use("/api/makets", require("./routes/makets"));
 app.use("/api/options", require("./routes/options"));
 app.use("/api/likes", require("./routes/likes"));
+app.use("/api/message", require("./routes/message"));
 
 app.listen(port, () => {
     console.log(`App listening on port ${port}`);
